@@ -63,7 +63,7 @@ def repeat(count, *requests):
     return command('{', count) +request_string(requests)+'}'
 
 ard = Arduino()
-ard.ask(pin(12), repeat(50, set(HIGH), wait_millis(100), set(LOW), wait_millis(200)))
-ard.close()#
+ard.ask(pin(13), repeat(50, set(HIGH), wait_millis(100), set(LOW), wait_millis(200)))
+ard.close()
 
 

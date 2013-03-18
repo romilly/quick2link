@@ -3,6 +3,7 @@
 #define ENQ 0x05
 
 unsigned int x = 0;
+int y = 0;
 int d = 13;
 Servo servo;
 
@@ -107,9 +108,11 @@ void txtEval (char *buf) {
     case 'W':
       servo.write(x);
       break;
-    case 'M':
-      servo.write(-x);
-      break;    
+    case '-':
+      y = -x;
+      break; 
+    case '+':
+      y = x;  
     }
   }
 }
