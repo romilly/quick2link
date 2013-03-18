@@ -1,4 +1,5 @@
 
+
 #include <Servo.h> 
 #define ENQ 0x05
 
@@ -106,7 +107,7 @@ void txtEval (char *buf) {
       servo.detach();
       break;
     case 'W':
-      servo.write(x);
+      servo.write(y);
       break;
     case '-':
       y = -x;
