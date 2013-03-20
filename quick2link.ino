@@ -1,4 +1,11 @@
+/*
+Experimental code for distributed embedded architectures.
 
+This Arduino code is inspired by and based on Ward Cunningham's
+Txtzyme https://github.com/WardCunningham/Txtzyme
+
+See LICENSE.md in this directory for licensing information
+*/
 
 #include <Servo.h> 
 #define ENQ 0x05
