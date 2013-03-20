@@ -81,7 +81,7 @@ void txtEval (char *buf) {
       arduino.digitalWrite(d, x%2);
       break;
     case 'm':
-      delay(x);
+      arduino.delay(x);
       break;
     case '{':
       k = x;
@@ -111,13 +111,13 @@ void txtEval (char *buf) {
       x = arduino.analogRead(x);
       break;
     case 'A':
-      servo.attach(x);
+      arduino.servoAttach(x);
       break;
     case 'D':
-      servo.detach();
+      arduino.servoDetach();
       break;
     case 'W':
-      servo.write(y);
+      arduino.servoWrite(y);
       break;
     case '-':
       y = -x;
