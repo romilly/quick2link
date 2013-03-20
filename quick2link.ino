@@ -1,3 +1,4 @@
+
 /*
 Experimental code for distributed embedded architectures.
 
@@ -6,18 +7,20 @@ Txtzyme https://github.com/WardCunningham/Txtzyme
 
 See LICENSE.md in this directory for licensing information
 */
-
-#include <Servo.h> 
+#include "Microcontroller.h"
+#include <Servo.h>
 #define ENQ 0x05
 
 unsigned int x = 0;
 int y = 0;
 int d = 13;
 Servo servo;
+Microcontroller arduino;
 
 void setup() {
   Serial.begin(38400);
   servo = Servo();
+  arduino = Microcontroller();
   
 }
 
@@ -71,11 +74,11 @@ void txtEval (char *buf) {
       break;
     case 'i':
       pinMode(d, INPUT); 
-      x = digitalRead(d);
+      x = arduino.digitalRead(d);
       break;
     case 'o':
-      pinMode(d, OUTPUT);   
-      digitalWrite(d, x%2);
+      arduino.pinMode(d, OUTPUT);   
+      arduino.digitalWrite(d, x%2);
       break;
     case 'm':
       delay(x);
@@ -105,7 +108,7 @@ void txtEval (char *buf) {
       Serial.println("arduino");
       break;
     case 's':
-      x = analogRead(x);
+      x = arduino.analogRead(x);
       break;
     case 'A':
       servo.attach(x);
