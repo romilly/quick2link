@@ -4,10 +4,10 @@ import serial, time
 
 HIGH = 1
 LOW = 0
-
+DEFAULT_PORT='/dev/ttyACM0'
 
 class SerialTransport:
-    def __init__(self, port='/dev/ttyACM0', baud=9600, timeout=1):
+    def __init__(self, port=DEFAULT_PORT, baud=9600, timeout=1):
         self._ser = serial.Serial(port, baud, timeout=timeout)
 
     def receive(self):
@@ -27,9 +27,9 @@ class SerialTransport:
 
 
 class Arduino():
-    def __init__(self, debug=False):
+    def __init__(self, debug=False, port='/dev/ttyACM0'):
         self._debug = debug
-        self._transport = SerialTransport()
+        self._transport = SerialTransport(port=port)
         time.sleep(1)
         self._transport.receive()
 
