@@ -64,7 +64,7 @@ def digital_write(value):
 
 
 def digital_read():
-    return 'i'
+    return 'ip'
 
 
 def repeat(count, *requests):

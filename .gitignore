@@ -28,3 +28,5 @@ nosetests.xml
 
 # Translations
 *.mo
+.DS_Store
+*~

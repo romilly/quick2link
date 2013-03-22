@@ -1,3 +1,4 @@
+#include <Microcontroller.h>
 
 /*
 Experimental code for distributed embedded architectures.
@@ -32,14 +33,14 @@ void loop() {
 }
 
 void txtRead (char *p, byte n) {
-  byte i = 0;
-  while (i < (n-1)) {
+  byte readCount = 0;
+  while (readCount < (n-1)) {
     while (!Serial.available());
     char ch = Serial.read();
     if (ch == '\r' || ch == '\n') break;
     if (ch >= ' ' && ch <= '~') {
       *p++ = ch;
-      i++;
+      readCount++;
     }
   }
   *p = 0;
@@ -73,7 +74,7 @@ void txtEval (char *buf) {
       d = x;
       break;
     case 'i':
-      pinMode(d, INPUT); 
+      pinMode(d, INPUT);
       x = arduino.digitalRead(d);
       break;
     case 'o':
@@ -101,7 +102,7 @@ void txtEval (char *buf) {
       while ((ch = *buf++) && ch != '_') {
         Serial.print(ch);
       }
-      Serial.println();
+      Serial.println(ch);
       break;
     case ENQ:
     case '?':

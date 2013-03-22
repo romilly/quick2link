@@ -3,23 +3,23 @@
 #include "Servo.h"
 
 Microcontroller::Microcontroller() {
-	servo = Servo();
+  servo = Servo();
 }
 
 unsigned int Microcontroller::digitalRead(int pin) {
-	return digitalRead(pin);
+  return ::digitalRead(pin);
 }
 
 void Microcontroller::pinMode(int pin, int mode) {
-	pinMode(pin, mode);
+  ::pinMode(pin, mode);
 }
 
 void Microcontroller::digitalWrite(int pin, int value) {
-	digitalWrite(pin, value);
+  ::digitalWrite(pin, value);
 }
 
 unsigned int Microcontroller::analogRead(int pin) {
-	return analogRead(pin);
+  return ::analogRead(pin);
 }
 
 void Microcontroller::servoAttach(int pin) {
@@ -35,7 +35,7 @@ void Microcontroller::servoWrite(int angle) {
 }
 
 void Microcontroller::delay(int millis) {
-        delay(millis);
+  ::delay(millis);
 }
 
 
