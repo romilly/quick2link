@@ -5,19 +5,17 @@ import serial, time
 HIGH = 1
 LOW = 0
 
+
 class SerialTransport:
-    def __init__(self, port='/dev/ttyACM0', baud=38400, timeout=1):
+    def __init__(self, port='/dev/ttyACM0', baud=9600, timeout=1):
         self._ser = serial.Serial(port, baud, timeout=timeout)
 
-    def ser(self):
-        return self._ser
-
     def receive(self):
-        return self.ser().readline()
+        return self._ser.readline()
 
     def send(self, text):
-        self.ser().write(text + '\n')
-        self.ser().flushOutput()
+        self._ser.write(text + '\n')
+        self._ser.flushOutput()
 
     def ask(self, text):
         self.send(text)
@@ -25,7 +23,7 @@ class SerialTransport:
         return self.receive()
 
     def close(self):
-        self.ser().close()
+        self._ser.close()
 
 
 class Arduino():
@@ -44,26 +42,36 @@ class Arduino():
     def close(self):
         self._transport.close()
 
+
 def request_string(requests):
-       return "".join(requests)
+    return "".join(requests)
+
 
 def command(code, number):
     return "%d%s" % (number, code)
 
+
 def pin(number):
     return command('d', number)
 
-def wait_millis(number):
-    return command('m', number)
 
-def set(number):
-    return command('o', number)
+def wait_millis(millis):
+    return command('m', millis)
+
+
+def digital_write(value):
+    return command('o', value)
+
+
+def digital_read():
+    return 'i'
+
 
 def repeat(count, *requests):
-    return command('{', count) +request_string(requests)+'}'
+    return command('{', count) + request_string(requests) + '}'
 
-ard = Arduino()
-ard.ask(pin(13), repeat(50, set(HIGH), wait_millis(100), set(LOW), wait_millis(200)))
-ard.close()
+# ard = Arduino()
+# ard.ask(repeat(10, set(HIGH), wait_millis(1000), set(LOW), wait_millis(1000)))
+# ard.close()
 
 
