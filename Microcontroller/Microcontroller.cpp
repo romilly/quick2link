@@ -23,24 +23,17 @@ unsigned int Microcontroller::analogRead(int pin) {
 }
 
 void Microcontroller::servoAttach(int pin) {
-        servo.attach(pin);
+    servo.attach(pin);
 }
 
 void Microcontroller::servoDetach() {
-        servo.detach();
+    servo.detach();
 }
 
 void Microcontroller::servoWrite(int angle) {
-        servo.write(angle);
+    servo.write(angle);
 }
 
-void Microcontroller::delay(int millis) {
-  ::delay(millis);
-}
-
-void Microcontroller::delayMicroseconds(int micros) {
-  ::delayMicroseconds(micros);
-}
 
 
 

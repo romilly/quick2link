@@ -12,30 +12,33 @@ See LICENSE.md in this directory for licensing information
 #include <Servo.h>
 #define ENQ 0x05
 
+const String Name = "arduino";
+const String Welcome = "up";
 unsigned long x = 0;
 int y = 0;
-int d = 13;
-Servo servo;
+int digitalPin = 13;
 Microcontroller arduino;
 
 void setup() {
   Serial.begin(115200);
-  servo = Servo();
+  Serial.setTimeout(-1);
   arduino = Microcontroller();
-  
+  Serial.println(Welcome);
 }
 
 void loop() {
   char buf[64];
-  txtRead(buf, 64);
-  txtEval(buf);
-  delay(1000);
+  if (txtRead(buf, 64)) {
+    txtEval(buf);
+  }
+  delay(100);
 }
 
-void txtRead (char *p, byte n) {
-  int count;
-  count = Serial.readBytesUntil('\n', p, 60);
+boolean txtRead (char *p, byte n) {
+  const int count = Serial.readBytesUntil('\n', p, 60);
+  Serial.println(">>>>");
   p[count] = 0;
+  return count > 0;
 }
 
 void txtEval (char *buf) {
@@ -63,21 +66,21 @@ void txtEval (char *buf) {
       Serial.print(x);
       break;
     case 'd':
-      d = x;
+      digitalPin = x;
       break;
     case 'i':
-      pinMode(d, INPUT);
-      x = arduino.digitalRead(d);
+      pinMode(digitalPin, INPUT);
+      x = arduino.digitalRead(digitalPin);
       break;
     case 'o':
-      arduino.pinMode(d, OUTPUT);   
-      arduino.digitalWrite(d, x%2);
+      arduino.pinMode(digitalPin, OUTPUT);   
+      arduino.digitalWrite(digitalPin, x%2);
       break;
     case 'm':
-      arduino.delay(x);
+      delay(x);
       break;
     case 'u':
-      arduino.delayMicroseconds(x);
+      delayMicroseconds(x);
       break;
     case '{':
       k = x;
@@ -101,7 +104,7 @@ void txtEval (char *buf) {
       break;
     case ENQ:
     case '?':
-      Serial.print("arduino");
+      Serial.print(Name);
       break;
     case 's':
       x = arduino.analogRead(x);
@@ -122,7 +125,7 @@ void txtEval (char *buf) {
       y = x;  
     }
   }
-  Serial.println("");
+  Serial.println();
 }
 
 

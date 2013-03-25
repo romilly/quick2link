@@ -1,15 +1,29 @@
 __author__ = 'romilly'
 
-import serial, time
+import time
+import sys
+import serial
+import serial.tools.list_ports
 
 HIGH = 1
 LOW = 0
 DEFAULT_PORT='/dev/ttyACM0'
 
+def port():
+    def osx_port():
+        for portname, description, id in serial.tools.list_ports.comports():
+            if 'tty.usbmodem' in portname: return portname
+        raise AssertionError('No port on OS/X in: ' + str(serial.tools.list_ports.comports()))
+
+    if 'linux' in sys.platform: return DEFAULT_PORT
+    if 'darwin' in sys.platform: return osx_port()
+    raise AssertionError('No port for platform: ' + sys.platform)
+
+
 class SerialTransport:
-    def __init__(self, port=DEFAULT_PORT, baud=115200):
+    def __init__(self, port=port(), baud=115200):
         self._ser = serial.Serial(port, baud, timeout=None)
-        self._ser.readline()
+        self._ser.readline().strip()
 
     def receive(self):
         return self._ser.readline()
@@ -20,15 +34,14 @@ class SerialTransport:
 
     def ask(self, text):
         self.send(text)
-        back = self.receive().strip()
-        return back
+        return self.receive().strip()
 
     def close(self):
         self._ser.close()
 
 
 class Arduino():
-    def __init__(self, debug=False, port='/dev/ttyACM0'):
+    def __init__(self, debug=False, port=port()):
         self._debug = debug
         self._transport = SerialTransport(port=port)
         time.sleep(0.1)
@@ -75,9 +88,4 @@ def repeat(count, *requests):
 
 def print_value():
     return 'p'
-
-# ard = Arduino()
-# ard.ask(repeat(10, set(HIGH), wait_millis(1000), set(LOW), wait_millis(1000)))
-# ard.close()
-
 
