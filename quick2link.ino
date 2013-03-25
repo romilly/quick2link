@@ -12,14 +12,14 @@ See LICENSE.md in this directory for licensing information
 #include <Servo.h>
 #define ENQ 0x05
 
-unsigned int x = 0;
+unsigned long x = 0;
 int y = 0;
 int d = 13;
 Servo servo;
 Microcontroller arduino;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   servo = Servo();
   arduino = Microcontroller();
   
@@ -29,21 +29,13 @@ void loop() {
   char buf[64];
   txtRead(buf, 64);
   txtEval(buf);
-  delay(10);
+  delay(1000);
 }
 
 void txtRead (char *p, byte n) {
-  byte readCount = 0;
-  while (readCount < (n-1)) {
-    while (!Serial.available());
-    char ch = Serial.read();
-    if (ch == '\r' || ch == '\n') break;
-    if (ch >= ' ' && ch <= '~') {
-      *p++ = ch;
-      readCount++;
-    }
-  }
-  *p = 0;
+  int count;
+  count = Serial.readBytesUntil('\n', p, 60);
+  p[count] = 0;
 }
 
 void txtEval (char *buf) {
@@ -68,7 +60,7 @@ void txtEval (char *buf) {
       }
       break;
     case 'p':
-      Serial.println(x);
+      Serial.print(x);
       break;
     case 'd':
       d = x;
@@ -105,11 +97,11 @@ void txtEval (char *buf) {
       while ((ch = *buf++) && ch != '_') {
         Serial.print(ch);
       }
-      Serial.println(ch);
+      Serial.print(ch);
       break;
     case ENQ:
     case '?':
-      Serial.println("arduino");
+      Serial.print("arduino");
       break;
     case 's':
       x = arduino.analogRead(x);
@@ -130,6 +122,7 @@ void txtEval (char *buf) {
       y = x;  
     }
   }
+  Serial.println("");
 }
 
 
