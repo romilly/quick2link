@@ -13,8 +13,11 @@ def port():
 class ArduinoSerialTransportTest(unittest.TestCase):
     def testSerialTransportSendsAndReceives(self):
         arduino = Arduino(port=port())
-        arduino.ask(pin(12), digital_write(HIGH), wait_millis(100))
-        self.assertEquals(HIGH, arduino.ask(pin(11), digital_read()))
+        arduino.ask(pin(12), digital_write(HIGH), wait_millis(10))
+        arduino_ask = arduino.ask(pin(11), digital_read(), print_value())
+        print arduino_ask
+        self.assertEquals(HIGH, int(arduino_ask))
+        arduino.close()
 
 
 if __name__ == '__main__':

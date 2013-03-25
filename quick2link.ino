@@ -19,7 +19,7 @@ Servo servo;
 Microcontroller arduino;
 
 void setup() {
-  Serial.begin(38400);
+  Serial.begin(9600);
   servo = Servo();
   arduino = Microcontroller();
   
@@ -83,6 +83,9 @@ void txtEval (char *buf) {
       break;
     case 'm':
       arduino.delay(x);
+      break;
+    case 'u':
+      arduino.delayMicroseconds(x);
       break;
     case '{':
       k = x;

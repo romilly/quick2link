@@ -22,6 +22,7 @@ class Microcontroller {
         unsigned int digitalRead(int pin);
         void digitalWrite(int pin, int value);
         void delay(int millis);
+        void delayMicroseconds(int micros);
         unsigned int analogRead(int pin);
         void servoAttach(int pin);
         void servoDetach();

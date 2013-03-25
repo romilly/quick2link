@@ -38,5 +38,9 @@ void Microcontroller::delay(int millis) {
   ::delay(millis);
 }
 
+void Microcontroller::delayMicroseconds(int micros) {
+  ::delayMicroseconds(micros);
+}
+
 
 
