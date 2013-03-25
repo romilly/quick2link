@@ -4,6 +4,7 @@ import time
 import sys
 import serial
 import serial.tools.list_ports
+from contextlib import contextmanager
 
 HIGH = 1
 LOW = 0
@@ -13,24 +14,31 @@ def port():
     def osx_port():
         for portname, description, id in serial.tools.list_ports.comports():
             if 'tty.usbmodem' in portname: return portname
-        raise AssertionError('No port on OS/X in: ' + str(serial.tools.list_ports.comports()))
+        raise serial.SerialException('No serial port on OS/X in: ' + str(serial.tools.list_ports.comports()))
 
     if 'linux' in sys.platform: return DEFAULT_PORT
     if 'darwin' in sys.platform: return osx_port()
-    raise AssertionError('No port for platform: ' + sys.platform)
+    raise serial.SerialException('No serial port for platform: ' + sys.platform)
+
+@contextmanager
+def closing(closeable):
+    try:
+        yield closeable
+    finally:
+        closeable.close()
 
 
 class SerialTransport:
     def __init__(self, port=port(), baud=115200):
-        self._ser = serial.Serial(port, baud, timeout=None)
-        self._ser.readline().strip()
+        self._ser = serial.Serial(port, baud)
+        self._ser.readline()
 
     def receive(self):
         return self._ser.readline()
 
     def send(self, text):
         self._ser.write(text + '\n')
-        self._ser.flushOutput()
+        self._ser.flush()
 
     def ask(self, text):
         self.send(text)
