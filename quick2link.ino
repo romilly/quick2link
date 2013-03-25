@@ -11,14 +11,14 @@ See LICENSE.md in this directory for licensing information
 #include "Microcontroller.h"
 #include <Servo.h>
 #define ENQ 0x05
+#define BUFFER_LENGTH 64
 
 const String Name = "arduino";
 const String Welcome = "up";
 const unsigned long Forever = 4294967295;
-unsigned long x = 0;
-int y = 0;
-int digitalPin = 13;
 Microcontroller arduino;
+
+char bufferIn[BUFFER_LENGTH];
 
 void setup() {
   Serial.begin(115200);
@@ -28,27 +28,35 @@ void setup() {
 }
 
 void loop() {
-  char buf[64];
-  if (txtRead(buf, 64)) {
-    txtEval(buf);
+  if (txtRead()) {
+    txtEval();
     delay(100);
   }
 }
 
-boolean txtRead (char *p, byte n) {
-  return Serial.readBytesUntil('\n', p, 60) > 0;
+boolean txtRead () {
+  const int readCount =  Serial.readBytesUntil('\n', bufferIn, 60);
+  bufferIn[readCount] = 0;
+  return readCount > 0;
 }
 
-void txtEval (char *buf) {
+void txtEval () {
+  char *in = bufferIn;
+  String result;  
+  result += '0';
+  
   char ch;
-  while ((ch = *buf++)) {
+  while ((ch = *in++)) {
     switch (ch) {
     case '?':
-      Serial.print(Name);
+      result += Name;
       break;
+    default: 
+      Serial.println("1");
+      return;
     }
   }
-  Serial.println();
+  Serial.println(result);
 }
 
 
