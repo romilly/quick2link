@@ -49,23 +49,24 @@ class SerialHalfDuplexTransport:
     def close(self):
         self._ser.close()
 
-OK = 0
+OK = '0'
 class Arduino():
     def __init__(self, port=_port()):
         self._transport = SerialHalfDuplexTransport(port=port)
         time.sleep(0.1)
 
     def ask(self, *requests):
-        return _error_checked(self._transport.ask(_do(requests)))
+        request = _do(requests)
+        return _error_checked(request, self._transport.ask(request))
 
     def close(self):
         self._transport.close()
 
 def _do(requests): return "".join(requests)
-def _error_checked(result):
+def _error_checked(request, response):
 #    if len(result) == 0: raise SerialTransportException("Empty response from Arduino")
-#    if result[0] != OK:
-    return result[1:]
+    if response[0] != OK: raise SerialTransportException("Error response from Arduino: '" +response + "' for '"+ request + "'")
+    return response[1:]
 
 
 def on_pin(number): return str(number) + 'd'
@@ -75,8 +76,6 @@ def digital_write(value): return str(value) + 'o'
 def digital_read(): return 'i'
 def whois(): return "?"
 def print_value(): return 'p'
-
-def repeat(count, *requests):
-    return command('{', count) + _do(requests) + '}'
+def repeat(count, *requests): return str(count)+ '{' + _do(requests) + '}'
 
 
