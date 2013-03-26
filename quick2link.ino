@@ -35,7 +35,7 @@ void loop() {
 }
 
 boolean txtRead () {
-  const int readCount =  Serial.readBytesUntil('\n', bufferIn, 60);
+  const int readCount =  Serial.readBytesUntil('\n', bufferIn, BUFFER_LENGTH - 1);
   bufferIn[readCount] = 0;
   return readCount > 0;
 }
