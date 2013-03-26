@@ -70,8 +70,8 @@ def _error_checked(request, response):
 
 
 def on_pin(number): return str(number) + 'd'
-def wait_millis(millis): return str(millis) + 'm'
-def wait_micros(micros): return str(micros) + 'u'
+def delay_millis(millis): return str(millis) + 'm'
+def delay_micros(micros): return str(micros) + 'u'
 def digital_write(value): return str(value) + 'o'
 def digital_read(): return 'i'
 def whois(): return "?"

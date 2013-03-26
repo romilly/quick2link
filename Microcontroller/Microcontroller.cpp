@@ -1,9 +1,7 @@
 #include "Arduino.h"
 #include "Microcontroller.h"
-#include "Servo.h"
 
 Microcontroller::Microcontroller() {
-  servo = Servo();
 }
 
 unsigned int Microcontroller::digitalRead(int pin) {
@@ -18,22 +16,11 @@ void Microcontroller::digitalWrite(int pin, int value) {
   ::digitalWrite(pin, value);
 }
 
-unsigned int Microcontroller::analogRead(int pin) {
-  return ::analogRead(pin);
+void Microcontroller::delayMilliseconds(unsigned long millis) {
+  ::delay(millis);
 }
 
-void Microcontroller::servoAttach(int pin) {
-    servo.attach(pin);
+void Microcontroller::delayMicroseconds(unsigned long micros) {
+  ::delayMicroseconds(micros);
 }
-
-void Microcontroller::servoDetach() {
-    servo.detach();
-}
-
-void Microcontroller::servoWrite(int angle) {
-    servo.write(angle);
-}
-
-
-
 

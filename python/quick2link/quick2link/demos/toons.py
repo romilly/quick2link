@@ -30,7 +30,7 @@ class Player():
             time.sleep( 1/ tempo)
             return
         (repeats, semi_period) = self. _note(note)
-        return  self._micro.ask(repeat(repeats, digital_write(HIGH), wait_micros(semi_period), digital_write(LOW), wait_micros(semi_period)), wait_millis(10))
+        return  self._micro.ask(repeat(repeats, digital_write(HIGH), delay_micros(semi_period), digital_write(LOW), delay_micros(semi_period)), delay_millis(10))
 
     def _note(self, note):
         frequency = scale[note]

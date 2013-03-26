@@ -92,6 +92,9 @@ String interpretBuffer(char *in) {
       pinMode(digitalPin, INPUT); 
       x = arduino.digitalRead(digitalPin);
       break;
+    case 'm':
+      arduino.delayMilliseconds(x);
+      break;
     case 'o':
       arduino.pinMode(digitalPin, OUTPUT);   
       arduino.digitalWrite(digitalPin, x%2);
@@ -99,6 +102,9 @@ String interpretBuffer(char *in) {
     case 'p':
       result += x;
       break;    
+    case 'u':
+      arduino.delayMicroseconds(x);
+      break;
     default: 
       return Fail  + ch + echo(echoed, echoString);
     }

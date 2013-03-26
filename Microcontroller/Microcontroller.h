@@ -15,18 +15,14 @@ Romilly Cocking 19 march 2013
 #include "Servo.h"
 
 class Microcontroller {
-    public:
-        Microcontroller();
-//        ~Microcontroller();
-        void pinMode(int pin, int value);
-        unsigned int digitalRead(int pin);
-        void digitalWrite(int pin, int value);
-        unsigned int analogRead(int pin);
-        void servoAttach(int pin);
-        void servoDetach();
-        void servoWrite(int angle);
-    private:
-        Servo servo;
+ public:
+  Microcontroller();
+  void pinMode(int pin, int value);
+  unsigned int digitalRead(int pin);
+  void digitalWrite(int pin, int value);
+  
+  void delayMilliseconds(unsigned long millis);
+  void delayMicroseconds(unsigned long micros);
 };
 
 #endif

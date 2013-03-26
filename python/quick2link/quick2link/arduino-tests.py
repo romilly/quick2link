@@ -28,6 +28,10 @@ class ArduinoTest(unittest.TestCase):
     def testEchoesProcessedCharacters(self):
         self.assertEqual("arduino>e?", self.arduino.ask("e", whois()))
 
+    def testAcceptsDelayRequests(self):
+        self.assertEqual("16>e16mp", self.arduino.ask(echo(), delay_millis(16), print_value()))
+        self.assertEqual("75>e75up", self.arduino.ask(echo(), delay_micros(75), print_value()))
+
     def testWritesAndReadsDigitalPin(self):
         # connect digital pins 11 <-> 12
         self.assertEqual("1>e12d1o11dip",
