@@ -25,8 +25,11 @@ class ArduinoTest(unittest.TestCase):
         self.assertIn(BAD_REQUEST, exception_message)
         self.assertIn('1', exception_message)
 
+    def testPrintsCurrentNumber(self):
+        self.assertEqual("222>e222p", self.arduino.ask(echo(), "222", print_value()))
+
     def testEchoesProcessedCharacters(self):
-        self.assertEqual("arduino>e?", self.arduino.ask("e", whois()))
+        self.assertEqual("arduino>e?", self.arduino.ask(echo(), whois()))
 
     def testAcceptsDelayRequests(self):
         self.assertEqual("16>e16mp", self.arduino.ask(echo(), delay_millis(16), print_value()))
