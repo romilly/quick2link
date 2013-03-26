@@ -90,11 +90,11 @@ String interpretBuffer(char *in) {
       break;
     case 'i':
       pinMode(digitalPin, INPUT); 
-      x = digitalRead(digitalPin);
+      x = arduino.digitalRead(digitalPin);
       break;
     case 'o':
-      pinMode(digitalPin, OUTPUT);   
-      digitalWrite(digitalPin, x%2);
+      arduino.pinMode(digitalPin, OUTPUT);   
+      arduino.digitalWrite(digitalPin, x%2);
       break;
     case 'p':
       result += x;
