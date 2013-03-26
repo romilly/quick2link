@@ -65,7 +65,7 @@ class Arduino():
 def _do(requests): return "".join(requests)
 def _error_checked(request, response):
 #    if len(result) == 0: raise SerialTransportException("Empty response from Arduino")
-    if response[0] != OK: raise SerialTransportException("Error response from Arduino: '" +response + "' for '"+ request + "'")
+    if response[0] != OK: raise SerialTransportException("Error response from Arduino: '" + response + "' for '"+ request + "'")
     return response[1:]
 
 
@@ -76,6 +76,7 @@ def digital_write(value): return str(value) + 'o'
 def digital_read(): return 'i'
 def whois(): return "?"
 def print_value(): return 'p'
+def echo(): return 'e'
 def repeat(count, *requests): return str(count)+ '{' + _do(requests) + '}'
 
 

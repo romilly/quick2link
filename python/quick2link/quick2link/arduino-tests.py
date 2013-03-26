@@ -11,8 +11,7 @@ class SerialHalfDuplexTransportTest(unittest.TestCase):
 
 BAD_REQUEST='`'
 class ArduinoTest(unittest.TestCase):
-    def setUp(self):
-        self.arduino = Arduino()
+    def setUp(self): self.arduino = Arduino()
     def tearDown(self):
         if self.arduino is not None: self.arduino.close()
 
@@ -22,7 +21,25 @@ class ArduinoTest(unittest.TestCase):
     def testFailsWithUnknownCommand(self):
         with self.assertRaises(SerialTransportException) as cm:
             self.arduino.ask(BAD_REQUEST)
-        self.assertIn(BAD_REQUEST, str(cm.exception))
+        exception_message = str(cm.exception)
+        self.assertIn(BAD_REQUEST, exception_message)
+        self.assertIn('1', exception_message)
+
+    def testEchoesProcessedCharacters(self):
+        self.assertEqual("arduino>e?", self.arduino.ask("e", whois()))
+
+    def testWritesAndReadsDigitalPin(self):
+        # connect digital pins 11 <-> 12
+        self.assertEqual("1>e12d1o11dip",
+            self.arduino.ask(
+                echo(),
+                on_pin(12), digital_write(HIGH),
+                on_pin(11), digital_read(), print_value()))
+        self.assertEqual("0>e12d0o11dip",
+            self.arduino.ask(
+                echo(),
+                on_pin(12), digital_write(LOW),
+                on_pin(11), digital_read(), print_value()))
 
 if __name__ == '__main__':
     unittest.main()

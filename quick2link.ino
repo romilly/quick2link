@@ -13,12 +13,14 @@ See LICENSE.md in this directory for licensing information
 #define ENQ 0x05
 #define BUFFER_LENGTH 64
 
+const unsigned int DefaultDigitalPin = 13;
+const String Ok = "0";
+const String Fail = "1";
 const String Name = "arduino";
 const String Welcome = "up";
 const unsigned long Forever = 4294967295;
-Microcontroller arduino;
 
-char bufferIn[BUFFER_LENGTH];
+Microcontroller arduino;
 
 void setup() {
   Serial.begin(115200);
@@ -28,36 +30,82 @@ void setup() {
 }
 
 void loop() {
-  if (txtRead()) {
-    txtEval();
+  char bufferIn[BUFFER_LENGTH];
+  if (txtRead(bufferIn)) {
+    txtEval(bufferIn);
     delay(100);
   }
 }
 
-boolean txtRead () {
+boolean txtRead (char *bufferIn) {
   const int readCount =  Serial.readBytesUntil('\n', bufferIn, BUFFER_LENGTH - 1);
   bufferIn[readCount] = 0;
   return readCount > 0;
 }
 
-void txtEval () {
-  char *in = bufferIn;
-  String result;  
-  result += '0';
+
+void txtEval (char *bufferIn) {
+  Serial.println(interpretBuffer(bufferIn));
+}
+
+boolean is_a_digit(char c) { return '0' <= c && c <= '9'; }
+unsigned int as_digit(char c) { return c - '0'; }
+String echo(boolean echoed, String echoString) { return echoed ? ">" + echoString : "";  }
+
+String interpretBuffer(char *in) {
+  unsigned int digitalPin = DefaultDigitalPin;
+  unsigned int x = 0;
+  boolean echoed = false;
+  String result = Ok;
+  String echoString;
   
   char ch;
   while ((ch = *in++)) {
+    echoString += ch;
     switch (ch) {
     case '?':
       result += Name;
       break;
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+      x = as_digit(ch);
+      while (is_a_digit(*in)) {
+        echoString += *in;
+        x = x*10 + as_digit(*in++);
+      }
+      break;
+    case 'd':
+      digitalPin = x;
+      break;
+    case 'e':
+      echoed = ! echoed;
+      break;
+    case 'i':
+      pinMode(digitalPin, INPUT); 
+      x = digitalRead(digitalPin);
+      break;
+    case 'o':
+      pinMode(digitalPin, OUTPUT);   
+      digitalWrite(digitalPin, x%2);
+      break;
+    case 'p':
+      result += x;
+      break;    
     default: 
-      Serial.println("1");
-      return;
+      return Fail  + ch + echo(echoed, echoString);
     }
   }
-  Serial.println(result);
+  return result + echo(echoed, echoString);
 }
+
 
 
 
