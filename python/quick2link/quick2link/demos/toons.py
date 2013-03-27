@@ -21,7 +21,7 @@ class Player():
         self._micro = micro
 
     def play(self, notes):
-        print self._micro.ask(on_pin(7))
+        self._micro.ask(on_pin(7))
         for note in notes:
             self.play_note(note)
 
@@ -30,10 +30,7 @@ class Player():
             time.sleep( 1/ tempo)
             return
         (repeats, semi_period) = self. _note(note)
-        print repeats, semi_period, note
-        print self._micro.ask(whois())
-        return self._micro.ask(digital_write(HIGH))
-#        return self._micro.ask(repeat(repeats, digital_write(HIGH), delay_micros(semi_period), digital_write(LOW), delay_micros(semi_period)), delay_millis(10))
+        return self._micro.ask(repeat(repeats, digital_write(HIGH), delay_micros(semi_period), digital_write(LOW), delay_micros(semi_period)), delay_millis(10))
 
     def _note(self, note):
         frequency = scale[note]
