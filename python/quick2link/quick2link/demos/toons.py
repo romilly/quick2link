@@ -19,9 +19,9 @@ tempo = 4
 class Player():
     def __init__(self, micro):
         self._micro = micro
-        self._micro.ask(on_pin(9))
 
     def play(self, notes):
+        print self._micro.ask(on_pin(7))
         for note in notes:
             self.play_note(note)
 
@@ -30,7 +30,10 @@ class Player():
             time.sleep( 1/ tempo)
             return
         (repeats, semi_period) = self. _note(note)
-        return  self._micro.ask(repeat(repeats, digital_write(HIGH), delay_micros(semi_period), digital_write(LOW), delay_micros(semi_period)), delay_millis(10))
+        print repeats, semi_period, note
+        print self._micro.ask(whois())
+        return self._micro.ask(digital_write(HIGH))
+#        return self._micro.ask(repeat(repeats, digital_write(HIGH), delay_micros(semi_period), digital_write(LOW), delay_micros(semi_period)), delay_millis(10))
 
     def _note(self, note):
         frequency = scale[note]
@@ -41,7 +44,6 @@ class Player():
     def close(self):
         self._micro.close()
 
-player = Player(Arduino())
-#ard.ask(pin(9), repeat(50, digital_write(HIGH), wait_micros(4000), digital_write(LOW), wait_micros(4000)))
-player.play('ccggaag ffeeddc')
-player.close()
+with closing(Player(Arduino())) as player:
+    #ard.ask(pin(9), repeat(50, digital_write(HIGH), wait_micros(4000), digital_write(LOW), wait_micros(4000)))
+    player.play('ccggaag ffeeddc')

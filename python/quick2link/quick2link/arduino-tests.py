@@ -16,7 +16,7 @@ class ArduinoTest(unittest.TestCase):
         if self.arduino is not None: self.arduino.close()
 
     def testRespondsWithIdentifier(self):
-        self.assertEqual("arduino", self.arduino.ask(whois()))
+        self.assertEqual("arduino x=0, digitalPin=13", self.arduino.ask(whois()))
 
     def testFailsWithUnknownCommand(self):
         with self.assertRaises(SerialTransportException) as cm:
@@ -27,6 +27,10 @@ class ArduinoTest(unittest.TestCase):
     def testPrintsCurrentNumber(self):
         self.assertEqual("222>?222p", self.arduino.ask(echo(), "222", print_value()))
 
+    def testDigitalPinSettingPersistsBetweenRequest(self):
+        self.assertIn("digitalPin=7", self.arduino.ask(on_pin(7), whois()))
+        self.assertIn("digitalPin=7", self.arduino.ask(whois()))
+
     def testRepeatsInstructions(self):
         self.assertEqual("111>?12d1o11d2{ip}ip}ip}p",
             self.arduino.ask( echo(),
@@ -36,7 +40,7 @@ class ArduinoTest(unittest.TestCase):
                 print_value()))
 
     def testEchoesProcessedCharacters(self):
-        self.assertEqual("arduino>?h", self.arduino.ask(echo(), whois()))
+        self.assertEqual("arduino x=0, digitalPin=13>?h", self.arduino.ask(echo(), whois()))
 
     def testAcceptsDelayRequests(self):
         self.assertEqual("16>?16mp", self.arduino.ask(echo(), delay_millis(16), print_value()))

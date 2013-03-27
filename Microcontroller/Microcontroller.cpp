@@ -1,12 +1,12 @@
 #include "Arduino.h"
 #include "Microcontroller.h"
 
-unsigned int ArduinoController::digitalRead(int pin) {
-  return ::digitalRead(pin);
-}
-
 void ArduinoController::pinMode(int pin, int mode) {
   ::pinMode(pin, mode);
+}
+
+unsigned int ArduinoController::digitalRead(int pin) {
+  return ::digitalRead(pin);
 }
 
 void ArduinoController::digitalWrite(int pin, int value) {

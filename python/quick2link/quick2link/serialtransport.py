@@ -64,7 +64,7 @@ class Arduino():
 
 def _do(requests): return "".join(requests)
 def _error_checked(request, response):
-#    if len(result) == 0: raise SerialTransportException("Empty response from Arduino")
+    if len(response) == 0: raise SerialTransportException("Empty response from Arduino")
     if response[0] != OK: raise SerialTransportException("Error response from Arduino: '" + response + "' for '"+ request + "'")
     return response[1:]
 

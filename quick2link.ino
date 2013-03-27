@@ -21,6 +21,7 @@ const String Welcome = "up";
 const unsigned long Forever = 4294967295;
 
 ArduinoController anArduino;
+unsigned int digitalPin = DefaultDigitalPin;
 
 void setup() {
   Serial.begin(115200);
@@ -53,7 +54,6 @@ unsigned int as_digit(char c) { return c - '0'; }
 String echo(boolean echoed, String echoString) { return echoed ? ">" + echoString : "";  }
 
 String interpretBuffer(const char *in, Microcontroller &controller) {
-  unsigned int digitalPin = DefaultDigitalPin;
   unsigned int x = 0;
   unsigned int repeats = 0;
   const char *loopStart;
@@ -64,10 +64,11 @@ String interpretBuffer(const char *in, Microcontroller &controller) {
   
   char ch;
   while ((ch = *in++)) {
-    echoString += ch;
+    if (echoed) echoString += ch;
     switch (ch) {
-    case 'h':
-      result += Name;
+    case '?':
+      echoed = ! echoed;
+      if (echoed) echoString += '?';
       break;
     case '0':
     case '1':
@@ -81,15 +82,15 @@ String interpretBuffer(const char *in, Microcontroller &controller) {
     case '9':
       x = as_digit(ch);
       while (is_a_digit(*in)) {
-        echoString += *in;
+        if (echoed) echoString += *in;
         x = x*10 + as_digit(*in++);
       }
       break;
     case 'd':
       digitalPin = x;
       break;
-    case '?':
-      echoed = ! echoed;
+    case 'h':
+      result += Name + " x=" + x + ", digitalPin=" + digitalPin;
       break;
     case 'i':
       pinMode(digitalPin, INPUT); 
@@ -112,7 +113,7 @@ String interpretBuffer(const char *in, Microcontroller &controller) {
       repeats = x;
       loopStart = in;
       while ((ch = *in) && ch != '}') {
-        echoString += ch;
+        if (echoed) echoString += ch;
         in++;
       } 
       break;
