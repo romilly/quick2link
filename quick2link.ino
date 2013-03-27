@@ -70,6 +70,9 @@ String interpretBuffer(const char *in, Microcontroller &controller) {
       echoed = ! echoed;
       if (echoed) echoString += '?';
       break;
+    case ' ':
+      // ignore
+      break;
     case '0':
     case '1':
     case '2':

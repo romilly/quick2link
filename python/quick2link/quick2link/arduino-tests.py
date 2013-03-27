@@ -42,6 +42,9 @@ class ArduinoTest(unittest.TestCase):
     def testEchoesProcessedCharacters(self):
         self.assertEqual("arduino x=0, digitalPin=13>?h", self.arduino.ask(echo(), whois()))
 
+    def testIgnoresSpaces(self):
+        self.assertEqual("00>?  p  p", self.arduino.ask(echo(), "  p  p"))
+
     def testAcceptsDelayRequests(self):
         self.assertEqual("16>?16mp", self.arduino.ask(echo(), delay_millis(16), print_value()))
         self.assertEqual("75>?75up", self.arduino.ask(echo(), delay_micros(75), print_value()))
