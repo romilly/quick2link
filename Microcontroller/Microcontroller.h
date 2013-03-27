@@ -11,12 +11,20 @@ Romilly Cocking 19 march 2013
 #ifndef Microcontroller_h
 #define Microcontroller_h
 
-#include "Arduino.h"
-#include "Servo.h"
-
 class Microcontroller {
  public:
-  Microcontroller();
+  virtual ~Microcontroller() {};
+  virtual void pinMode(int pin, int value) = 0;
+  virtual unsigned int digitalRead(int pin) = 0;
+  virtual void digitalWrite(int pin, int value) = 0;
+  
+  virtual void delayMilliseconds(unsigned long millis) = 0;
+  virtual void delayMicroseconds(unsigned long micros) = 0;
+};
+
+class ArduinoController : public Microcontroller {
+ public:
+  virtual ~ArduinoController() {};
   void pinMode(int pin, int value);
   unsigned int digitalRead(int pin);
   void digitalWrite(int pin, int value);
@@ -24,5 +32,6 @@ class Microcontroller {
   void delayMilliseconds(unsigned long millis);
   void delayMicroseconds(unsigned long micros);
 };
+
 
 #endif

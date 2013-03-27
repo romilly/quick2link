@@ -20,12 +20,12 @@ const String Name = "arduino";
 const String Welcome = "up";
 const unsigned long Forever = 4294967295;
 
-Microcontroller arduino;
+ArduinoController anArduino;
 
 void setup() {
   Serial.begin(115200);
   Serial.setTimeout(Forever);
-  arduino = Microcontroller();
+  anArduino = ArduinoController();
   Serial.println(Welcome);
 }
 
@@ -45,16 +45,19 @@ boolean txtRead (char *bufferIn) {
 
 
 void txtEval (char *bufferIn) {
-  Serial.println(interpretBuffer(bufferIn));
+  Serial.println(interpretBuffer(bufferIn, anArduino));
 }
 
 boolean is_a_digit(char c) { return '0' <= c && c <= '9'; }
 unsigned int as_digit(char c) { return c - '0'; }
 String echo(boolean echoed, String echoString) { return echoed ? ">" + echoString : "";  }
 
-String interpretBuffer(char *in) {
+String interpretBuffer(const char *in, Microcontroller &controller) {
   unsigned int digitalPin = DefaultDigitalPin;
   unsigned int x = 0;
+  unsigned int repeats = 0;
+  const char *loopStart;
+  
   boolean echoed = false;
   String result = Ok;
   String echoString;
@@ -90,20 +93,34 @@ String interpretBuffer(char *in) {
       break;
     case 'i':
       pinMode(digitalPin, INPUT); 
-      x = arduino.digitalRead(digitalPin);
+      x = controller.digitalRead(digitalPin);
       break;
     case 'm':
-      arduino.delayMilliseconds(x);
+      controller.delayMilliseconds(x);
       break;
     case 'o':
-      arduino.pinMode(digitalPin, OUTPUT);   
-      arduino.digitalWrite(digitalPin, x%2);
+      controller.pinMode(digitalPin, OUTPUT);   
+      controller.digitalWrite(digitalPin, x%2);
       break;
     case 'p':
       result += x;
       break;    
     case 'u':
-      arduino.delayMicroseconds(x);
+ 
+      break;
+    case '{':
+      repeats = x;
+      loopStart = in;
+      while ((ch = *in) && ch != '}') {
+        echoString += ch;
+        in++;
+      } 
+      break;
+    case '}':
+      if (repeats) {
+        repeats--;
+        in = loopStart;
+      }
       break;
     default: 
       return Fail  + ch + echo(echoed, echoString);

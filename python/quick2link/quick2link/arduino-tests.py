@@ -22,11 +22,18 @@ class ArduinoTest(unittest.TestCase):
         with self.assertRaises(SerialTransportException) as cm:
             self.arduino.ask(BAD_REQUEST)
         exception_message = str(cm.exception)
-        self.assertIn(BAD_REQUEST, exception_message)
-        self.assertIn('1', exception_message)
+        self.assertIn("'1" + BAD_REQUEST + "'", exception_message)
 
     def testPrintsCurrentNumber(self):
         self.assertEqual("222>e222p", self.arduino.ask(echo(), "222", print_value()))
+
+    def testRepeatsInstructions(self):
+        self.assertEqual("111>e12d1o11d2{ip}ip}ip}p",
+            self.arduino.ask( echo(),
+                on_pin(12), digital_write(HIGH),
+                on_pin(11),
+                repeat(2, digital_read(), print_value()),
+                print_value()))
 
     def testEchoesProcessedCharacters(self):
         self.assertEqual("arduino>e?", self.arduino.ask(echo(), whois()))

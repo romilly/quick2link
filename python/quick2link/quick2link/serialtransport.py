@@ -69,14 +69,14 @@ def _error_checked(request, response):
     return response[1:]
 
 
-def on_pin(number): return str(number) + 'd'
 def delay_millis(millis): return str(millis) + 'm'
 def delay_micros(micros): return str(micros) + 'u'
 def digital_write(value): return str(value) + 'o'
 def digital_read(): return 'i'
-def whois(): return "?"
-def print_value(): return 'p'
 def echo(): return 'e'
-def repeat(count, *requests): return str(count)+ '{' + _do(requests) + '}'
+def on_pin(number): return str(number) + 'd'
+def print_value(): return 'p'
+def repeat(count, *requests): return str(count) + '{' + _do(requests) + '}'
+def whois(): return "?"
 
 
