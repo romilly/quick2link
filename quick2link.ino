@@ -66,7 +66,7 @@ String interpretBuffer(const char *in, Microcontroller &controller) {
   while ((ch = *in++)) {
     echoString += ch;
     switch (ch) {
-    case '?':
+    case 'h':
       result += Name;
       break;
     case '0':
@@ -88,7 +88,7 @@ String interpretBuffer(const char *in, Microcontroller &controller) {
     case 'd':
       digitalPin = x;
       break;
-    case 'e':
+    case '?':
       echoed = ! echoed;
       break;
     case 'i':
