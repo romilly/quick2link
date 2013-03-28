@@ -3,7 +3,6 @@ __author__ = 'romilly'
 import time
 import sys
 import serial
-import serial.tools.list_ports
 from contextlib import contextmanager
 
 HIGH = 1
@@ -12,6 +11,7 @@ DEFAULT_PORT='/dev/ttyACM0'
 
 def _port():
     def osx_port():
+        import serial.tools.list_ports
         for portname, description, id in serial.tools.list_ports.comports():
             if 'tty.usbmodem' in portname: return portname
         raise serial.SerialException('No serial port on OS/X in: ' + str(serial.tools.list_ports.comports()))
