@@ -51,7 +51,7 @@ class ArduinoTest(unittest.TestCase):
 
     def testWritesAndReadsDigitalPin(self):
         # connect digital pins 11 <-> 12
-        self.assertEqual("1>?12d1o11dip",
+        self.assertEqual("0>?12d1o11dip",
             self.arduino.ask(
                 echo(),
                 on_pin(12), digital_write(HIGH),
