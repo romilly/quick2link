@@ -13,6 +13,10 @@ void ArduinoController::digitalWrite(int pin, int value) {
   ::digitalWrite(pin, value);
 }
 
+unsigned int ArduinoController::analogRead(int pin) {
+  return ::analogRead(pin);
+}
+
 void ArduinoController::delayMilliseconds(unsigned long millis) {
   ::delay(millis);
 }

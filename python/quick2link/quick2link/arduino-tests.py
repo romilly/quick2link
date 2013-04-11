@@ -62,5 +62,24 @@ class ArduinoTest(unittest.TestCase):
                 on_pin(12), digital_write(LOW),
                 on_pin(11), digital_read(), print_value()))
 
+    def askForAnalogInput(self, LEVEL):
+        return self.arduino.ask(
+            echo(),
+            on_pin(7), digital_write(LEVEL),
+            on_pin(0), analog_read(), print_value())
+
+    def checkAnalogReadResponse(self, level, low, high, expected_text):
+        response = self.askForAnalogInput(level)
+        self.assertTrue('>' in response, 'unexpected response without > %s' % response)
+        (analog_reading, echoed) = response.split('>')
+        value = int(analog_reading)
+        self.assertTrue(low <= value & value <= high, "analogue value %i should be between %i and %i" % (value, low, high))
+        self.assertEqual(echoed, expected_text)
+
+    def testReadsAnalogPin(self):
+        # connect digital pin 7 to analog pin 0
+        self.checkAnalogReadResponse(HIGH, 1021, 1023, "?7d1o0dsp")
+        self.checkAnalogReadResponse(LOW, 0, 2, "?7d0o0dsp")
+
 if __name__ == '__main__':
     unittest.main()
