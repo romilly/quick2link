@@ -30,14 +30,6 @@ class ArduinoTest(unittest.TestCase):
     def testDigitalPinSettingPersistsBetweenRequest(self):
         self.assertIn("digitalPin=7", self.arduino.ask(on_pin(7), whois()))
         self.assertIn("digitalPin=7", self.arduino.ask(whois()))
-    
-    def testRepeatsInstructions(self):
-        self.assertEqual("111>?12d1o11d2{ip}ip}ip}p",
-            self.arduino.ask( echo(),
-                on_pin(12), digital_write(HIGH),
-                on_pin(11),
-                repeat(2, digital_read(), print_value()),
-                print_value()))
 
     def testEchoesProcessedCharacters(self):
         self.assertEqual("arduino x=0, digitalPin=13>?h", self.arduino.ask(echo(), whois()))
@@ -48,6 +40,15 @@ class ArduinoTest(unittest.TestCase):
     def testAcceptsDelayRequests(self):
         self.assertEqual("16>?16mp", self.arduino.ask(echo(), delay_millis(16), print_value()))
         self.assertEqual("75>?75up", self.arduino.ask(echo(), delay_micros(75), print_value()))
+
+    def testRepeatsInstructions(self):
+        # connect digital pins 11 <-> 12
+        self.arduino.ask(on_pin(12), digital_write(HIGH))
+        self.assertEqual("111>?11d2{ip}ip}ip}p",
+            self.arduino.ask( echo(),
+                on_pin(11),
+                repeat(2, digital_read(), print_value()),
+                print_value()))
 
     def testWritesAndReadsDigitalPin(self):
         # connect digital pins 11 <-> 12
