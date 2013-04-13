@@ -21,7 +21,7 @@ class Player():
         self._micro = micro
 
     def play(self, notes):
-        self._micro.ask(on_pin(7))
+        self._micro.ask(on_pin(5))
         for note in notes:
             self.play_note(note)
 

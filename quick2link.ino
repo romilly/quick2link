@@ -111,7 +111,10 @@ String interpretBuffer(const char *in, Microcontroller &controller) {
       break;
     case 's':
       x = controller.analogRead(x);
-      break;    
+      break; 
+    case 't':
+      controller.servoPosition(x);
+      break;   
     case 'u':
       controller.delayMicroseconds(x);
       break;
