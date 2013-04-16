@@ -41,6 +41,6 @@ class Player():
     def close(self):
         self._micro.close()
 
-with closing(Player(Arduino())) as player:
+with closing(Player(Device())) as player:
     #ard.ask(pin(9), repeat(50, digital_write(HIGH), wait_micros(4000), digital_write(LOW), wait_micros(4000)))
     player.play('ccggaag ffeeddc')
