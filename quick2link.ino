@@ -1,5 +1,3 @@
-#include <Microcontroller.h>
-
 /*
 Experimental code for distributed embedded architectures.
 
@@ -17,7 +15,6 @@ const unsigned int DefaultDigitalPin = 13;
 const String Ok = "0";
 const String Fail = "1";
 const String Name = "arduino";
-const String Welcome = "up";
 const unsigned long Forever = 4294967295;
 
 ArduinoController anArduino;
@@ -27,7 +24,6 @@ void setup() {
   Serial.begin(115200);
   Serial.setTimeout(Forever);
   anArduino = ArduinoController();
-  Serial.println(Welcome);
 }
 
 void loop() {
@@ -89,6 +85,9 @@ String interpretBuffer(const char *in, Microcontroller &controller) {
         x = x*10 + as_digit(*in++);
       }
       break;
+    case 'a':
+       controller.attach(x);
+       break;
     case 'd':
       digitalPin = x;
       break;
@@ -108,7 +107,13 @@ String interpretBuffer(const char *in, Microcontroller &controller) {
       break;
     case 'p':
       result += x;
-      break;    
+      break;
+    case 's':
+      x = controller.analogRead(x);
+      break; 
+    case 't':
+      controller.servoPosition(x);
+      break;   
     case 'u':
       controller.delayMicroseconds(x);
       break;
