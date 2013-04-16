@@ -1,3 +1,5 @@
+#include <Wire.h>   
+
 const int OnboardLED = 13;
 const int EventLED = 8;
 
@@ -23,14 +25,16 @@ void receiveEvent(int howMany)
 
 void do_command(char x) {
   switch(x) {
-    case '1': digitalWrite(EventLED, HIGH); break;
-    case '0': digitalWrite(EventLED, LOW); break;
+    case 7: digitalWrite(EventLED, HIGH); break;
+    case 8: digitalWrite(EventLED, LOW); break;
   }
 }
 
 void setup() {
   pinMode(OnboardLED, OUTPUT);
   pinMode(EventLED, OUTPUT);
+  Wire.begin(4);                // join i2c bus with address #4
+  Wire.onReceive(receiveEvent);
   flashForStartup();  
 }
 
