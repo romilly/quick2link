@@ -15,7 +15,7 @@ We're also adding location and discovery services.
 Set up
 ------
 
-###ÊArduino
+### Arduino
 
 On Unices, create a soft link (`ln -s`) from the directory where your Arduino environment keeps its sketches to each directory in the arduino-sketches directory:
 
@@ -29,7 +29,7 @@ Then do the same for the libraries
     cd <your Arduino directory>/libraries
     ln -s <quick2link directory>/arduino-libraries/* .
     
-###ÊPython
+### Python
 
 You need to have your added to your `quick2wire-python-api` directory to your exported `PYTHONPATH` 
 
