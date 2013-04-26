@@ -25,8 +25,8 @@ void receiveEvent(int howMany)
 
 void do_command(char x) {
   switch(x) {
-    case 7: digitalWrite(EventLED, HIGH); break;
-    case 8: digitalWrite(EventLED, LOW); break;
+    case '1': digitalWrite(EventLED, HIGH); break;
+    case '0': digitalWrite(EventLED, LOW); break;
   }
 }
 
