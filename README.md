@@ -29,6 +29,14 @@ Then do the same for the libraries
     cd <your Arduino directory>/libraries
     ln -s <quick2link directory>/arduino-libraries/* .
     
+For the I2C connection, connect SDA to A4, SCL to A5, and Ground to Ground. The lines on our 6-pin headers are:
+     ---------------
+    | 3v3  *SCL*  Int |
+    | 5v   *SDA*  Gnd |
+     -----     -----
+     
+     
+         
 ### Python
 
 You need to have your added to your `quick2wire-python-api` directory to your exported `PYTHONPATH` 
