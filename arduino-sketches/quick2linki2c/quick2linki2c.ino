@@ -1,12 +1,16 @@
+#include <Servo.h>
+#include <Microcontroller.h>
 #include <Wire.h>   
 
 const unsigned int BufferLength = 64;
-const int OnboardLED = 13;
-const int EventLED = 8;
+const unsigned int OnboardLED = 13;
 const int SlaveAddress = 0x04;
 const String Ok = "0";
 const String Fail = "1";
+const unsigned long Forever = 4294967295;
 const String Name = "arduino";
+
+ArduinoController anArduino;
 
 void flashOnboardLED() {
   digitalWrite(OnboardLED, HIGH);
@@ -14,11 +18,19 @@ void flashOnboardLED() {
   digitalWrite(OnboardLED, LOW);
 }
 
-
 void flashForStartup() {
   flashOnboardLED();
   delay(200);
   flashOnboardLED();
+}
+
+void setup() {
+  pinMode(OnboardLED, OUTPUT);
+  Wire.begin(SlaveAddress);
+  Wire.setTimeout(Forever);
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(respond);
+  flashForStartup();  
 }
 
 unsigned int as_digit(char c) { return c - '0'; }
@@ -31,7 +43,7 @@ void receiveEvent(int howMany) {
   interpret(buffer);
 }
 
-String response;
+String response = "";
 
 void respond() {
   char response_buffer[BUFFER_LENGTH];
@@ -65,21 +77,13 @@ void interpret(const char *request) {
         break;
       case 'h': response = Name; break;
       case '?': 
-        response += "x= "; 
+        response = "x= "; 
         response += x; 
         break;
     }
   }
 }
 
-void setup() {
-  pinMode(OnboardLED, OUTPUT);
-  pinMode(EventLED, OUTPUT);
-  Wire.begin(SlaveAddress);  // join i2c bus with address #4
-  Wire.onReceive(receiveEvent);
-  Wire.onRequest(respond);
-  flashForStartup();  
-}
 
 void loop() {
 }
