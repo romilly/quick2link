@@ -1,7 +1,12 @@
 #include <Wire.h>   
 
+const unsigned int BufferLength = 64;
 const int OnboardLED = 13;
 const int EventLED = 8;
+const int SlaveAddress = 0x04;
+const String Ok = "0";
+const String Fail = "1";
+const String Name = "arduino";
 
 void flashOnboardLED() {
   digitalWrite(OnboardLED, HIGH);
@@ -18,23 +23,34 @@ void flashForStartup() {
 
 void receiveEvent(int howMany)
 {
-  char x = Wire.read();    // receive byte as a character
-  flashOnboardLED();
-  do_command(x);      
+  for (int i = 0; i < howMany; i++) {
+    do_command(Wire.read());      
+  }
 }
 
-void do_command(char x) {
-  switch(x) {
+String response;
+
+void respond() {
+  char response_buffer[BUFFER_LENGTH];
+  response_buffer[0] = response.length();
+  response.toCharArray((response_buffer + 1), BufferLength);
+  Wire.write(response_buffer);
+}
+
+void do_command(char c) {
+  switch(c) {
     case '1': digitalWrite(EventLED, HIGH); break;
     case '0': digitalWrite(EventLED, LOW); break;
+    case 'h': response = Name; break;
   }
 }
 
 void setup() {
   pinMode(OnboardLED, OUTPUT);
   pinMode(EventLED, OUTPUT);
-  Wire.begin(4);                // join i2c bus with address #4
+  Wire.begin(SlaveAddress);  // join i2c bus with address #4
   Wire.onReceive(receiveEvent);
+  Wire.onRequest(respond);
   flashForStartup();  
 }
 
