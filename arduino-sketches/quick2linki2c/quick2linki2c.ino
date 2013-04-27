@@ -35,6 +35,7 @@ void respond() {
   response_buffer[0] = response.length();
   response.toCharArray((response_buffer + 1), BufferLength);
   Wire.write(response_buffer);
+  response = "";
 }
 
 void do_command(char c) {
