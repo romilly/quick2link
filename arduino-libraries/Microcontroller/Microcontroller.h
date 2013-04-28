@@ -1,12 +1,7 @@
-/*
-
-This class represents an Arduino or clone.
-
-We will eventually define an interface so we can use a mock for testing,
-and this class for deployment.
-
-Romilly Cocking 19 march 2013
-*/
+/**
+ * An Arduino or clone 
+ * (CC) quick2wire.com 2013
+ */
 
 #include <Servo.h>
 

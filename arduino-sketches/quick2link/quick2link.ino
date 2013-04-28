@@ -23,7 +23,6 @@ unsigned int digitalPin = DefaultDigitalPin;
 void setup() {
   Serial.begin(115200);
   Serial.setTimeout(Forever);
-  anArduino = ArduinoController();
 }
 
 void loop() {
